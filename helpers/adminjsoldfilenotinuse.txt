@@ -1,0 +1,70 @@
+var express = require('express');
+
+var router = express.Router();
+
+var productHelper=require('../helpers/product-helpers')
+
+/* GET users listing. */
+router.get('/', function(req, res, next) {
+
+  let products=[
+    {
+    name:"Samsung Xcover",
+    Catagory: "Mobile",
+    Description: "Life ho tho aiyse bindas",
+    image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGopLpeYCu1QiETWnDNxbjIGlcjrYpG6NmBQ&s"
+    },
+    {
+      name:"Samsung Galaxy A24",
+      Catagory: "Mobile",
+      Description: "Life ho tho aiyse bindas",
+      image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRjcTyKh6ImnwDEgqAsVq7SqFMEi-kOlsq5w&s"
+    },
+    {
+          name:"Moto G 200",
+        Catagory: "Mobile",
+        Description: "Life ho tho aiyse bindas",
+        image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1UO1QuC0MWVgD21L707mzi5O8b7noRtUKFg&s"
+        },
+        {
+          name:"Iphone 15 Pro",
+          Catagory: "Mobile",
+          Description: "Test",
+          image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS12Av-RcTD-zcdKsadl2BgVjsSNzXi3BTO5A&s"
+          }
+  ]
+
+
+res.render('admin/view-products',{admin:true, products});
+});
+
+
+
+router.get('/add-products',function(req,res){
+  res.render('admin/add-products');
+})
+
+
+router.post('/add-products',(req,res)=>{
+  console.log(req.body);
+  console.log(req.files.image)
+  productHelper.addProduct(req.body,(id)=>{
+    let image=req.files.image
+    image.mv('./public/images/'+id+'.jpg',(err,done)=>{
+      if (!err){
+        
+        res.render("admin/add-products")
+      }
+      else{
+        console.log(err)
+      }
+    })
+    
+
+  })
+  
+}
+)
+
+
+module.exports = router;
